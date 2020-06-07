@@ -1,11 +1,10 @@
-
 const video = document.getElementById("inputVideo");
-var emoji_sad =  document.getElementById("sad");
-var emoji_angry =  document.getElementById("angry");
-var emoji_natural =  document.getElementById("natural");
+var emoji_sad = document.getElementById("sad");
+var emoji_angry = document.getElementById("angry");
+var emoji_natural = document.getElementById("natural");
 try {
-    window.AppInventor.setWebViewString( "js load5" );
-}catch(err) { 
+    window.AppInventor.setWebViewString("js load5");
+} catch (err) {
     console.log(err);
 }
 Promise.all([
@@ -16,23 +15,23 @@ Promise.all([
 ]).then(startVideo);
 
 function startVideo() {
-    navigator.mediaDevices.getUserMedia({ video: {} })
-    .then(function(stream) {
-        video.srcObject = stream;
-    })
-    .catch(function(err) {
-        try {
-            window.AppInventor.setWebViewString( err );
-        }catch(err) { 
-            console.log(err);
-        }
-    });
-    
+    navigator.mediaDevices
+        .getUserMedia({ video: {} })
+        .then(function (stream) {
+            video.srcObject = stream;
+        })
+        .catch(function (err) {
+            try {
+                window.AppInventor.setWebViewString(err);
+            } catch (err) {
+                console.log(err);
+            }
+        });
 }
 var timer = 1000;
 var count = 0;
 // video.addEventListener("play", () => {
-   
+
 //     const canvas = faceapi.createCanvasFromMedia(video);
 //     document.body.append(canvas);
 //     const displaySize = { width: video.width, height: video.height };
@@ -58,16 +57,17 @@ var count = 0;
 // });
 
 // Sad and Angry
-let detectExpressions = async (video) => {
+let detectExpressions = async (result) => {
     // detect expression
-
-    let result =await faceapi
-        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
+    console.log(result);
+    // let result = await faceapi
+    //     .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+    //     .withFaceExpressions();
 
     if (typeof result !== "undefined") {
         let sad = 0,
             anger = 0;
-            console.log(result);
+        console.log(result);
         if (result.expressions.hasOwnProperty("sad")) {
             sad = result.expressions.sad;
         }
@@ -78,63 +78,68 @@ let detectExpressions = async (video) => {
         if (sad > 0.7) {
             count += 1;
             onExpression("sad");
-            if(count === 3) { 
-                alert('you really sad');
-                window.AppInventor.setWebViewString( "sad" );
+            if (count === 3) {
+                alert("you really sad");
+                window.AppInventor.setWebViewString("sad");
             }
         } else if (anger > 0.7) {
             count += 1;
             onExpression("angry");
-            if(count === 3) { 
-                alert('you really angry');
-                window.AppInventor.setWebViewString( "angry" );
+            if (count === 3) {
+                alert("you really angry");
+                window.AppInventor.setWebViewString("angry");
             }
-        } else { 
+        } else {
             count = 0;
             onExpression("natural");
         }
     }
 };
 
-
-function onExpression(emotion) { 
-    if(emotion === "sad") { 
+function onExpression(emotion) {
+    if (emotion === "sad") {
         emoji_sad.style.display = "block";
         emoji_angry.style.display = "none";
         emoji_natural.style.display = "none";
-    }
-    else if(emotion === "angry") { 
+    } else if (emotion === "angry") {
         emoji_sad.style.display = "none";
         emoji_angry.style.display = "block";
         emoji_natural.style.display = "none";
-    }else { 
+    } else {
         emoji_sad.style.display = "none";
         emoji_angry.style.display = "none";
         emoji_natural.style.display = "block";
     }
 }
 
-
 async function onPlay() {
-    const videoEl = $('#inputVideo').get(0)
+    const displaySize = { width: video.width, height: video.height };
+    const videoEl = $("#inputVideo").get(0);
 
-    if(videoEl.paused || videoEl.ended)
-      return setTimeout(() => onPlay())
+    if (videoEl.paused || videoEl.ended) return setTimeout(() => onPlay());
 
-    // let result =await faceapi
-    //     .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-    //     .withFaceLandmarks()
-    //     .withFaceExpressions();
+    let result = await faceapi
+        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceExpressions();
 
-        detectExpressions(videoEl);
-    setTimeout(() => onPlay())
-  }
+    detectExpressions(result);
+    if (result) {
+        const canvas = $('#overlay').get(0)
+        const dims = faceapi.matchDimensions(canvas, videoEl, true)
 
-  async function run() {
-    // try to access users webcam and stream the images
-    // to the video element
-    const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
-    const videoEl = $('#inputVideo').get(0)
-    videoEl.srcObject = stream
-  }
-  run();
+        const resizedResult = faceapi.resizeResults(result, dims)
+        const minConfidence = 0.05
+        faceapi.draw.drawDetections(canvas, resizedResult)
+        faceapi.draw.drawFaceExpressions(canvas, resizedResult, minConfidence)
+    }
+    // setTimeout(() => onPlay());
+    setTimeout(() => onPlay(), 1000);
+}
+
+async function run() {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+    const videoEl = $("#inputVideo").get(0);
+    videoEl.srcObject = stream;
+}
+run();
