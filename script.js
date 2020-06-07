@@ -20,13 +20,15 @@ function startVideo() {
     navigator.getUserMedia(
         { video: {} },
         (stream) => (video.srcObject = stream),
-        (err) => console.error(err)
+        (err) => {
+            try {
+                window.AppInventor.setWebViewString( "camera get errorß" );
+            }catch(err) { 
+                console.log(err);
+            }
+        }
     );
-    try {
-        window.AppInventor.setWebViewString( "camera get" );
-    }catch(err) { 
-        console.log(err);
-    }
+    
 }
 var timer = 1000;
 var count = 0;
