@@ -123,11 +123,10 @@ async function onPlay() {
     if(videoEl.paused || videoEl.ended)
       return setTimeout(() => onPlay())
 
-
-    let result =await faceapi
-        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks()
-        .withFaceExpressions();
+    // let result =await faceapi
+    //     .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+    //     .withFaceLandmarks()
+    //     .withFaceExpressions();
 
         detectExpressions(videoEl);
     setTimeout(() => onPlay())
