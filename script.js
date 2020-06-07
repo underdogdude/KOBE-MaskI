@@ -1,5 +1,5 @@
 
-const video = document.getElementById("video");
+const video = document.getElementById("inputVideo");
 var emoji_sad =  document.getElementById("sad");
 var emoji_angry =  document.getElementById("angry");
 var emoji_natural =  document.getElementById("natural");
@@ -16,18 +16,6 @@ Promise.all([
 ]).then(startVideo);
 
 function startVideo() {
-    console.log('start video');
-    // navigator.getUserMedia(
-    //     { video: {} },
-    //     (stream) => (video.srcObject = stream),
-    //     (err) => {
-    //         try {
-    //             window.AppInventor.setWebViewString( "camera get errorß" );
-    //         }catch(err) { 
-    //             console.log(err);
-    //         }
-    //     }
-    // );
     navigator.mediaDevices.getUserMedia({ video: {} })
     .then(function(stream) {
         video.srcObject = stream;
@@ -43,31 +31,31 @@ function startVideo() {
 }
 var timer = 1000;
 var count = 0;
-video.addEventListener("play", () => {
+// video.addEventListener("play", () => {
    
-    const canvas = faceapi.createCanvasFromMedia(video);
-    document.body.append(canvas);
-    const displaySize = { width: video.width, height: video.height };
-    faceapi.matchDimensions(canvas, displaySize);
-    setInterval(async () => {
-        const detections = await faceapi
-            .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-            .withFaceLandmarks()
-            .withFaceExpressions();
+//     const canvas = faceapi.createCanvasFromMedia(video);
+//     document.body.append(canvas);
+//     const displaySize = { width: video.width, height: video.height };
+//     faceapi.matchDimensions(canvas, displaySize);
+//     setInterval(async () => {
+//         const detections = await faceapi
+//             .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+//             .withFaceLandmarks()
+//             .withFaceExpressions();
 
-        detectExpressions(video);
+//         detectExpressions(video);
 
-        // Show on Canvas
-        const resizedDetections = faceapi.resizeResults(
-            detections,
-            displaySize
-        );
-        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-        faceapi.draw.drawDetections(canvas, resizedDetections);
-        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-        faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-    }, timer);
-});
+//         // Show on Canvas
+//         const resizedDetections = faceapi.resizeResults(
+//             detections,
+//             displaySize
+//         );
+//         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+//         faceapi.draw.drawDetections(canvas, resizedDetections);
+//         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+//         faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+//     }, timer);
+// });
 
 // Sad and Angry
 let detectExpressions = async (video) => {
@@ -77,8 +65,6 @@ let detectExpressions = async (video) => {
         .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
         .withFaceLandmarks()
         .withFaceExpressions();
-
-
 
     if (typeof result !== "undefined") {
         let sad = 0,
@@ -129,3 +115,29 @@ function onExpression(emotion) {
         emoji_natural.style.display = "block";
     }
 }
+
+
+async function onPlay() {
+    const videoEl = $('#inputVideo').get(0)
+
+    if(videoEl.paused || videoEl.ended)
+      return setTimeout(() => onPlay())
+
+
+    let result =await faceapi
+        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceExpressions();
+
+        detectExpressions(videoEl);
+    setTimeout(() => onPlay())
+  }
+
+  async function run() {
+    // try to access users webcam and stream the images
+    // to the video element
+    const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
+    const videoEl = $('#inputVideo').get(0)
+    videoEl.srcObject = stream
+  }
+  run();
