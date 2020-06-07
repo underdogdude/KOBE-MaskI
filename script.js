@@ -12,7 +12,7 @@ Promise.all([
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
     faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
     faceapi.nets.faceExpressionNet.loadFromUri("./models"),
-]).then(startVideo);
+]).then(run);
 
 function startVideo() {
     navigator.mediaDevices
@@ -142,4 +142,3 @@ async function run() {
     const videoEl = $("#inputVideo").get(0);
     videoEl.srcObject = stream;
 }
-run();
