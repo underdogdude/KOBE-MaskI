@@ -22,6 +22,11 @@ function startVideo() {
         (stream) => (video.srcObject = stream),
         (err) => console.error(err)
     );
+    try {
+        window.AppInventor.setWebViewString( "camera get" );
+    }catch(err) { 
+        console.log(err);
+    }
 }
 var timer = 1000;
 var count = 0;
