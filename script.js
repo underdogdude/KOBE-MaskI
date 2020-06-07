@@ -16,6 +16,7 @@ Promise.all([
 ]).then(startVideo);
 
 function startVideo() {
+    console.log('start video');
     navigator.getUserMedia(
         { video: {} },
         (stream) => (video.srcObject = stream),
