@@ -14,55 +14,13 @@ Promise.all([
     faceapi.nets.faceExpressionNet.loadFromUri("./models"),
 ]).then(run);
 
-function startVideo() {
-    navigator.mediaDevices
-        .getUserMedia({ video: {} })
-        .then(function (stream) {
-            video.srcObject = stream;
-        })
-        .catch(function (err) {
-            try {
-                window.AppInventor.setWebViewString(err);
-            } catch (err) {
-                console.log(err);
-            }
-        });
-}
 var timer = 1000;
 var count = 0;
-// video.addEventListener("play", () => {
-
-//     const canvas = faceapi.createCanvasFromMedia(video);
-//     document.body.append(canvas);
-//     const displaySize = { width: video.width, height: video.height };
-//     faceapi.matchDimensions(canvas, displaySize);
-//     setInterval(async () => {
-//         const detections = await faceapi
-//             .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-//             .withFaceLandmarks()
-//             .withFaceExpressions();
-
-//         detectExpressions(video);
-
-//         // Show on Canvas
-//         const resizedDetections = faceapi.resizeResults(
-//             detections,
-//             displaySize
-//         );
-//         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-//         faceapi.draw.drawDetections(canvas, resizedDetections);
-//         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-//         faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-//     }, timer);
-// });
 
 // Sad and Angry
 let detectExpressions = async (result) => {
     // detect expression
     console.log(result);
-    // let result = await faceapi
-    //     .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-    //     .withFaceExpressions();
 
     if (typeof result !== "undefined") {
         let sad = 0,
@@ -113,8 +71,12 @@ function onExpression(emotion) {
 }
 
 async function onPlay() {
-    const displaySize = { width: video.width, height: video.height };
+    
     const videoEl = $("#inputVideo").get(0);
+    let displaySize = {
+        width: $('#inputVideo').width(),
+        height: $('#inputVideo').height()
+    };
 
     if (videoEl.paused || videoEl.ended) return setTimeout(() => onPlay());
 
@@ -127,13 +89,11 @@ async function onPlay() {
     if (result) {
         const canvas = $('#overlay').get(0)
         const dims = faceapi.matchDimensions(canvas, videoEl, true)
-
-        const resizedResult = faceapi.resizeResults(result, dims)
+        const resizedResult = faceapi.resizeResults(result,displaySize);
         const minConfidence = 0.05
         faceapi.draw.drawDetections(canvas, resizedResult)
         faceapi.draw.drawFaceExpressions(canvas, resizedResult, minConfidence)
     }
-    // setTimeout(() => onPlay());
     setTimeout(() => onPlay(), 1000);
 }
 
