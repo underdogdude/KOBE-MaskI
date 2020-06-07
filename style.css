@@ -6,6 +6,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #0d1f31;
 }
 
 canvas {
@@ -586,5 +587,6 @@ canvas {
 }
 
 video { 
-    /* visibility: hidden; */
+    visibility: hidden;
+    /* display:none; */
 }
