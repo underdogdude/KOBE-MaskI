@@ -62,9 +62,7 @@ let detectExpressions = async (video) => {
     // detect expression
 
     let result =await faceapi
-        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks()
-        .withFaceExpressions();
+        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
 
     if (typeof result !== "undefined") {
         let sad = 0,
