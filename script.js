@@ -1,4 +1,7 @@
 const video = document.getElementById("video");
+var emoji_sad =  document.getElementById("sad");
+var emoji_angry =  document.getElementById("angry");
+var emoji_natural =  document.getElementById("natural");
 
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
@@ -14,9 +17,10 @@ function startVideo() {
         (err) => console.error(err)
     );
 }
-
+var timer = 1000;
+var count = 0;
 video.addEventListener("play", () => {
-    // detectExpressions();
+   
     const canvas = faceapi.createCanvasFromMedia(video);
     document.body.append(canvas);
     const displaySize = { width: video.width, height: video.height };
@@ -28,6 +32,8 @@ video.addEventListener("play", () => {
             .withFaceExpressions();
 
         detectExpressions(video);
+
+        // Show on Canvas
         const resizedDetections = faceapi.resizeResults(
             detections,
             displaySize
@@ -36,20 +42,24 @@ video.addEventListener("play", () => {
         faceapi.draw.drawDetections(canvas, resizedDetections);
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
         faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-    }, 100);
+    }, timer);
 });
 
 // Sad and Angry
 let detectExpressions = async (video) => {
     // detect expression
+
     let result =await faceapi
         .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
         .withFaceLandmarks()
         .withFaceExpressions();
 
+
+
     if (typeof result !== "undefined") {
         let sad = 0,
             anger = 0;
+            console.log(result);
         if (result.expressions.hasOwnProperty("sad")) {
             sad = result.expressions.sad;
         }
@@ -58,9 +68,20 @@ let detectExpressions = async (video) => {
         }
 
         if (sad > 0.7) {
+            count += 1;
             onExpression("sad");
+            if(count === 3) { 
+                alert('you really sad');
+            }
         } else if (anger > 0.7) {
+            count += 1;
             onExpression("angry");
+            if(count === 3) { 
+                alert('you really angry');
+            }
+        } else { 
+            count = 0;
+            onExpression("natural");
         }
     }
 };
@@ -68,11 +89,17 @@ let detectExpressions = async (video) => {
 
 function onExpression(emotion) { 
     if(emotion === "sad") { 
-        document.getElementById("emotion_container").innerHTML = "SAD!";
+        emoji_sad.style.display = "block";
+        emoji_angry.style.display = "none";
+        emoji_natural.style.display = "none";
     }
     else if(emotion === "angry") { 
-        document.getElementById("emotion_container").innerHTML = "ANGRY!";
+        emoji_sad.style.display = "none";
+        emoji_angry.style.display = "block";
+        emoji_natural.style.display = "none";
     }else { 
-        document.getElementById("emotion_container").innerHTML = "...!";
+        emoji_sad.style.display = "none";
+        emoji_angry.style.display = "none";
+        emoji_natural.style.display = "block";
     }
 }

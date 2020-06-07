@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <script defer src="./face-api.min.js"></script>
-  <script defer src="./script.js"></script>
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Emotion Driving Mask I</title>
+    <link rel="stylesheet" href="./style.css" /> 
 
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    canvas {
-      position: absolute;
-    }
-  </style>
+    <script defer src="./face-api.min.js"></script>
+    <script defer src="./script.js"></script>
+    
 </head>
 
 <body>
-  <video id="video" width="50" height="50" autoplay muted></video>
-  <h3 id="emotion_container"></h3>
+    <video id="video" width="50" height="50" autoplay muted></video>
+    <div class="emoji  emoji--sad" id="sad" style="display: none;">
+        <div class="emoji__face">
+            <div class="emoji__eyebrows"></div>
+            <div class="emoji__eyes"></div>
+            <div class="emoji__mouth"></div>
+        </div>
+    </div>
+    <div class="emoji  emoji--angry" id="angry" style="display: none;">
+        <div class="emoji__face">
+            <div class="emoji__eyebrows"></div>
+            <div class="emoji__eyes"></div>
+            <div class="emoji__mouth"></div>
+        </div>
+    </div>
+    <div class="emoji  emoji--wow" id="natural" style="display: block;">
+        <div class="emoji__face">
+            <div class="emoji__eyebrows"></div>
+            <div class="emoji__eyes"></div>
+            <div class="emoji__mouth"></div>
+        </div>
+    </div>
 </body>
+
 </html>
