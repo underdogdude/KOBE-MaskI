@@ -34,7 +34,7 @@ function startVideo() {
     })
     .catch(function(err) {
         try {
-            window.AppInventor.setWebViewString( "camera get errorß" );
+            window.AppInventor.setWebViewString( err );
         }catch(err) { 
             console.log(err);
         }
