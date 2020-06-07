@@ -1,8 +1,10 @@
+
 const video = document.getElementById("video");
 var emoji_sad =  document.getElementById("sad");
 var emoji_angry =  document.getElementById("angry");
 var emoji_natural =  document.getElementById("natural");
-
+window.AppInventor.getWebViewString();
+window.AppInventor.setWebViewString( "js load" );
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
@@ -72,12 +74,14 @@ let detectExpressions = async (video) => {
             onExpression("sad");
             if(count === 3) { 
                 alert('you really sad');
+                window.AppInventor.setWebViewString( "sad" );
             }
         } else if (anger > 0.7) {
             count += 1;
             onExpression("angry");
             if(count === 3) { 
                 alert('you really angry');
+                window.AppInventor.setWebViewString( "angry" );
             }
         } else { 
             count = 0;
