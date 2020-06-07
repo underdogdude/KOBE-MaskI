@@ -4,7 +4,7 @@ var emoji_sad =  document.getElementById("sad");
 var emoji_angry =  document.getElementById("angry");
 var emoji_natural =  document.getElementById("natural");
 try {
-    window.AppInventor.setWebViewString( "js load4" );
+    window.AppInventor.setWebViewString( "js load5" );
 }catch(err) { 
     console.log(err);
 }
