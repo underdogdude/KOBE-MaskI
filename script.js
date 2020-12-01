@@ -2,6 +2,9 @@ const video = document.getElementById("inputVideo");
 var emoji_sad = document.getElementById("sad");
 var emoji_angry = document.getElementById("angry");
 var emoji_natural = document.getElementById("natural");
+
+var emotions_elems = document.getElementById("emotions");
+
 try {
     window.AppInventor.setWebViewString("js load5");
 } catch (err) {
@@ -25,27 +28,36 @@ let detectExpressions = async (result) => {
     if (typeof result !== "undefined") {
         let sad = 0,
             anger = 0;
-        console.log(result);
+        // display one emotion footer
+        var string = "";
+        for (var key in result.expressions) {
+            if (result.expressions.hasOwnProperty(key)) {
+                if (result.expressions[key] >= 0.2 && result.expressions[key] <= 1) {
+                    string += `<div style="display: flex;
+                    flex-direction: column;
+                    align-items: center;"><span> ${key} </span><span> ${result.expressions[key].toFixed(2)} </span></div>`
+                }
+            }
+        }
+        $(emotions_elems).html(string);
+
         if (result.expressions.hasOwnProperty("sad")) {
             sad = result.expressions.sad;
         }
         if (result.expressions.hasOwnProperty("angry")) {
             anger = result.expressions.angry;
         }
-
         if (sad > 0.7) {
             count += 1;
             onExpression("sad");
             if (count === 3) {
                 alert("you really sad");
-                window.AppInventor.setWebViewString("sad");
             }
         } else if (anger > 0.7) {
             count += 1;
             onExpression("angry");
             if (count === 3) {
                 alert("you really angry");
-                window.AppInventor.setWebViewString("angry");
             }
         } else {
             count = 0;
@@ -71,7 +83,6 @@ function onExpression(emotion) {
 }
 
 async function onPlay() {
-    
     const videoEl = $("#inputVideo").get(0);
     let displaySize = {
         width: $('#inputVideo').width(),
@@ -88,9 +99,9 @@ async function onPlay() {
     detectExpressions(result);
     if (result) {
         const canvas = $('#overlay').get(0)
-        const dims = faceapi.matchDimensions(canvas, videoEl, true)
+        const dims = faceapi.matchDimensions(canvas, displaySize, true)
         const resizedResult = faceapi.resizeResults(result,displaySize);
-        const minConfidence = 0.05
+        const minConfidence = 0.3
         faceapi.draw.drawDetections(canvas, resizedResult)
         faceapi.draw.drawFaceExpressions(canvas, resizedResult, minConfidence)
     }
