@@ -16,6 +16,9 @@ body.-flex {
     justify-content: space-between;
     background-color: #F1F3F9;;
 }
+.text--capital { 
+    text-transform: capitalize;
+}
 .m-color { 
     color: #F2994A;
 }
@@ -115,6 +118,7 @@ body.-flex {
 }
 .display--area .title { 
     color: #BCBCBC;
+    font-size: 12px;
 }
 
 
@@ -122,6 +126,19 @@ canvas {
     position: absolute;
 }
 
+.emotion { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.emotion .emotion--name { 
+    color: #F2994A;
+    text-transform: capitalize;
+    line-height: 1;
+}
+.emotion .emotion--score { 
+    font-size: 13px;
+}
 
 .emoji {
     width: 120px;

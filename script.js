@@ -4,6 +4,7 @@ var emoji_angry = document.getElementById("angry");
 var emoji_natural = document.getElementById("natural");
 
 var emotions_elems = document.getElementById("emotions");
+var main_emotions_elems = document.getElementById("main_emotion");
 
 try {
     window.AppInventor.setWebViewString("js load5");
@@ -33,36 +34,43 @@ let detectExpressions = async (result) => {
         for (var key in result.expressions) {
             if (result.expressions.hasOwnProperty(key)) {
                 if (result.expressions[key] >= 0.2 && result.expressions[key] <= 1) {
-                    string += `<div style="display: flex;
-                    flex-direction: column;
-                    align-items: center;"><span> ${key} </span><span> ${result.expressions[key].toFixed(2)} </span></div>`
+                    string += `<div class="emotion">
+                        <img src="../img/emoji/${key}.png" width="40px" />
+                        <span class="emotion--name"> ${key} </span>
+                        <span class="emotion--score"> ${result.expressions[key].toFixed(2)} </span>
+                    </div>`
                 }
             }
         }
+
+        var maxValue = Math.max.apply(null,Object.keys(result.expressions).map((o) => result.expressions[o]) );
+        var maxEmotion = Object.keys(result.expressions).find((o) => result.expressions[o] === maxValue); 
+        var stringEmotion = `<img src="../img/emoji/${maxEmotion}.png" width="90%" /> <h1 class="text--capital m-color">${maxEmotion}</h1>`;
+        $(main_emotions_elems).html(stringEmotion);
         $(emotions_elems).html(string);
 
-        if (result.expressions.hasOwnProperty("sad")) {
-            sad = result.expressions.sad;
-        }
-        if (result.expressions.hasOwnProperty("angry")) {
-            anger = result.expressions.angry;
-        }
-        if (sad > 0.7) {
-            count += 1;
-            onExpression("sad");
-            if (count === 3) {
-                alert("you really sad");
-            }
-        } else if (anger > 0.7) {
-            count += 1;
-            onExpression("angry");
-            if (count === 3) {
-                alert("you really angry");
-            }
-        } else {
-            count = 0;
-            onExpression("natural");
-        }
+        // if (result.expressions.hasOwnProperty("sad")) {
+        //     sad = result.expressions.sad;
+        // }
+        // if (result.expressions.hasOwnProperty("angry")) {
+        //     anger = result.expressions.angry;
+        // }
+        // if (sad > 0.7) {
+        //     count += 1;
+        //     onExpression("sad");
+        //     if (count === 3) {
+        //         alert("you really sad");
+        //     }
+        // } else if (anger > 0.7) {
+        //     count += 1;
+        //     onExpression("angry");
+        //     if (count === 3) {
+        //         alert("you really angry");
+        //     }
+        // } else {
+        //     count = 0;
+        //     onExpression("natural");
+        // }
     }
 };
 
@@ -105,7 +113,7 @@ async function onPlay() {
         faceapi.draw.drawDetections(canvas, resizedResult)
         faceapi.draw.drawFaceExpressions(canvas, resizedResult, minConfidence)
     }
-    setTimeout(() => onPlay(), 1000);
+    setTimeout(() => onPlay(), 2000);
 }
 
 async function run() {
