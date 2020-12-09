@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Emotion Driving Mask I</title>
+    <link rel="stylesheet" href="./style.css" /> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script defer src="./face-api.min.js"></script>
+    <script defer src="./video-detect.js"></script>
+    
+</head>
+
+<body class="-flex">
+    <div class="navbar">
+        <img src="./img/logo-horizon.svg" class="brand" alt="">
+    </div>
+    <div class="container -detecting">
+        <div class="container--inner" id="main_emotion">
+            <div style="position: relative" class="margin">
+                <video src="./img/driving.mp4" id="inputVideo" autoplay muted loop playsinline></video>
+                <canvas id="overlay" style="left: 0;" />
+              </div>
+        </div>
+    </div>
+</body>
