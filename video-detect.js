@@ -38,10 +38,11 @@ async function onPlay(videoEl) {
     .detectAllFaces(videoEl, new faceapi.TinyFaceDetectorOptions())
     .withFaceLandmarks()
     .withFaceExpressions();
-
-
+    
     // detectExpressions(results);
     if (results) {
+        
+        console.log('have results', results);
         const canvas = $('#overlay').get(0)
         const dims = faceapi.matchDimensions(canvas, videoEl, true)
         const resizedResult = faceapi.resizeResults(results,dims);
