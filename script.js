@@ -35,7 +35,7 @@ let detectExpressions = async (result) => {
             if (result.expressions.hasOwnProperty(key)) {
                 if (result.expressions[key] >= 0.2 && result.expressions[key] <= 1) {
                     string += `<div class="emotion">
-                        <img src="../img/emoji/${key}.png" width="40px" />
+                        <img src="./img/emoji/${key}.png" width="40px" />
                         <span class="emotion--name"> ${key} </span>
                         <span class="emotion--score"> ${result.expressions[key].toFixed(2)} </span>
                     </div>`
@@ -44,8 +44,9 @@ let detectExpressions = async (result) => {
         }
 
         var maxValue = Math.max.apply(null,Object.keys(result.expressions).map((o) => result.expressions[o]) );
+        console.log(maxValue);
         var maxEmotion = Object.keys(result.expressions).find((o) => result.expressions[o] === maxValue); 
-        var stringEmotion = `<img src="../img/emoji/${maxEmotion}.png" width="90%" /> <h1 class="text--capital m-color">${maxEmotion}</h1>`;
+        var stringEmotion = `<img src="./img/emoji/${maxEmotion}.png" width="90%" /> <h1 class="text--capital m-color">${maxEmotion}</h1>`;
         $(main_emotions_elems).html(stringEmotion);
         $(emotions_elems).html(string);
 
