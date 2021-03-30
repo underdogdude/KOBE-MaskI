@@ -778,3 +778,18 @@ video {
     }
   }
   
+
+.record { 
+    font-size: 10px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+.record.active { 
+    background-color: #d5234c;
+    color: white;
+}
