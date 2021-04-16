@@ -24,7 +24,11 @@ Promise.all([
 
 var timer = 1000;
 var count = 0;
-
+var trigg = {
+    emotion: "",
+    timer: 1,
+    soundTimer: 1
+}
 // Sad and Angry
 let detectExpressions = async (result) => {
     // detect expression
@@ -41,7 +45,14 @@ let detectExpressions = async (result) => {
                         <img src="./img/emoji/${key}.png" width="40px" />
                         <span class="emotion--name"> ${key} </span>
                         <span class="emotion--score"> ${result.expressions[key].toFixed(2)} </span>
-                    </div>`
+                    </div>`;
+                    
+                    if(trigg.emotion === key){ 
+                        trigg.timer +=1
+                    }else { 
+                        trigg.timer = 0;
+                        trigg.emotion = key;
+                    }
                 }
             }
         }
@@ -57,7 +68,33 @@ let detectExpressions = async (result) => {
         $(main_emotions_elems).html(stringEmotion);
         $(emotions_elems).html(string);
     }
+    if(trigg.timer > 3){ 
+        await sleep(5000, trigg.emotion).then(() => {
+            // Do something after the sleep!
+            audio.pause();
+            audio.currentTime = 0;
+        });
+    }
 };
+
+
+var audio = new Audio('./calm.mp3');
+function sleep(ms, emotion) {
+    switch(emotion){ 
+        case "angry":
+            audio.play();
+            break;
+        case "fearful":
+            audio.play();
+            break;
+        case "sad":
+            audio.play();
+            break;
+        default:
+            break; 
+    }
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function onExpression(emotion) {
     if (emotion === "sad") {
