@@ -6,15 +6,10 @@ var emoji_natural = document.getElementById("natural");
 var emotions_elems = document.getElementById("emotions");
 var main_emotions_elems = document.getElementById("main_emotion");
 
-
 // Record 
 var is_record = 0;
 var record_value = "";
-try {
-    window.AppInventor.setWebViewString("js load5");
-} catch (err) {
-    console.log(err);
-}
+
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
@@ -64,7 +59,27 @@ let detectExpressions = async (result) => {
         if (is_record === 1) { 
             record_value += maxEmotion + " (" + maxValue + ")" + "\n"; 
         }
-        var stringEmotion = `<img src="./img/emoji/${maxEmotion}.png" width="90%" /> <h1 class="text--capital m-color">${maxEmotion}</h1>`;
+        console.log(maxEmotion);
+
+        var stringEmotion = "";
+        switch (maxEmotion) { 
+            case "angry" :
+                stringEmotion = `<img src="./img/emoji/angry.svg" width="90%" /> <h1 class="text--capital">${maxEmotion}</h1>`;
+                break;
+                
+            case "sad" :
+                stringEmotion = `<img src="./img/emoji/sad.svg" width="90%" /> <h1 class="text--capital">${maxEmotion}</h1>`;
+                break;
+                
+            case "fearful" :
+                stringEmotion = `<img src="./img/emoji/fearful.svg" width="90%" /> <h1 class="text--capital">${maxEmotion}</h1>`;
+                break;
+                
+            default: 
+            stringEmotion = `<img src="./img/emoji/neutral.svg" width="90%" />`;
+                break;
+        }
+       
         $(main_emotions_elems).html(stringEmotion);
         $(emotions_elems).html(string);
     }
