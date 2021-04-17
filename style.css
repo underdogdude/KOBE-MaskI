@@ -4,11 +4,29 @@ body {
     width: 100vw;
     position: relative;
     min-height: 100vh; 
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-    font-family: 'Nunito', sans-serif;
-    background-color: #fff;
+    font-family: 'Zen Dots', sans-serif;
+    background-color: #0F181F;
+    color: #C7F2FF;
+}
+h1 { 
+    text-shadow: 0 0 20px rgba(0,189,192,.3); 
+}
+.font-poppins{
+    font-family: 'Poppins', sans-serif;
+}
+.bg-image { 
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: 100%;
+    opacity: .5;
+    z-index: -1;
+}
+.watermark { 
+    background: -webkit-linear-gradient(90deg, rgba(0,103,233,1), rgba(0,189,192,1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 body.-flex { 
     display: flex;
@@ -26,8 +44,9 @@ body.-flex {
     width: 100%;
 }
 .btn { 
-    background: #F2994A;
-    box-shadow: 0px 4px 4px rgba(153, 153, 153, 0.3);
+    background: rgb(0,103,233);
+    background: linear-gradient(90deg, rgba(0,103,233,1) 0%, rgba(0,189,192,1) 100%);
+    box-shadow: 0px 4px 4px rgba(0,189,192,.3   );
     border: none;
     color: white;
     text-transform: uppercase;
@@ -50,6 +69,8 @@ body.-flex {
     height: 100%;
     max-height: 100%;
     justify-content: space-between;
+    padding: 20px;
+
 } 
 .container.-connecting { 
     display: flex;

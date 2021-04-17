@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Emotion Driving Mask I</title>
+    <script src="./face-api.min.js"></script>
+
+    <link rel="stylesheet" href="./style.css" /> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background: #0F181F;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        canvas {
+            position: absolute;
+        }
+        .scanning{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(#03A9F4,#03A9F4), 
+            linear-gradient(90deg, #ffffff33 1px,transparent 0,transparent 19px),
+            linear-gradient(#ffffff33 1px,transparent 0,transparent 19px),
+            linear-gradient(transparent, #2196f387);
+            background-size:100% 1.5%, 10% 100%,100% 10%, 100% 100%;
+            background-repeat: no-repeat,repeat,repeat,no-repeat;
+            background-position: 0 0,0 0, 0 0, 0 0;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 1.5%, 0% 1.5%);
+            animation: move 2s infinite linear;
+            font-weight: bold;
+            font-size: 2em;
+            color: rgba(255,255,255,.3);
+        }
+        @keyframes move{
+            to{
+                background-position: 0 100%,0 0, 0 0, 0 0;
+                clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+            }
+        }
+        .wrapper{ 
+            position: relative;
+        }
+        .-scanning { 
+            padding: 20px;
+        }
+        .-scanning .heading { 
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            left: 30px;
+            text-align: center;
+        }
+        
+        .-scanning .footer-instructure { 
+            display: flex;
+            align-items: center;
+            position: fixed;
+            left: 30px;
+            right: 30px;
+            bottom: 30px;
+            background-color: rgba(199, 242, 255, .03);
+            border-radius: 10px;
+
+        }
+        .-scanning .footer-instructure img { 
+            width: 30%;
+            margin-right: 1em;
+        }
+        .-scanning .footer-instructure h4 {
+            margin: 0;
+            line-height: 1.5; 
+        }
+    </style>
+</head>
+
+<body class="-scanning">
+    <div class="heading">
+        <h1 class="">
+            Please wait for initial face scan.
+        </h1>
+    </div>
+    <div class="container">
+        <div class="wrapper">
+            <div class="scanning" style="display: none;" id="scanning">
+                <span id="count">Scanning...</span>
+            </div>
+            <div class="container -scanning">
+                <video id="video" autoplay muted playsinline width="300" 
+                height="250" ></video>
+            </div>
+        </div>
+    </div>
+    <div class="footer-instructure">
+        <img src="./img/connecting-step.png" class="headline" alt="">
+        <h4 class="font-poppins">
+            Please connect your mobile phone with Car Holder
+        </h4>
+    </div>
+</body>
+<script>
+
+const video = document.getElementById('video')
+let countNumber = 1; 
+Promise.all([
+  faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+  faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+  faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+  faceapi.nets.faceExpressionNet.loadFromUri('/models')
+]).then(startVideo)
+
+function startVideo() {
+  navigator.getUserMedia(
+    { video: {} },
+    stream => video.srcObject = stream,
+    err => console.error(err)
+  )
+}
+
+video.addEventListener('play', () => {
+  const canvas = faceapi.createCanvasFromMedia(video);
+  const displaySize = { width: video.width, height: video.height }
+  
+  document.body.append(canvas);
+  
+  faceapi.matchDimensions(canvas, displaySize)
+  setInterval(async () => {
+    const detections = await faceapi.detectAllFaces(
+        video, 
+        new faceapi.TinyFaceDetectorOptions()
+    ).withFaceLandmarks();
+
+    const resizedDetections = faceapi.resizeResults(detections, displaySize);
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+
+    // Detected
+    if(resizedDetections) { 
+        var scan = document.getElementById('scanning');
+            scan.style.display = "flex";
+        if(countNumber > 10) { 
+            window.location.href = './detecting.html';
+        }
+        countNumber ++;
+    }
+    faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+  }, 1000)
+});
+
+</script>
