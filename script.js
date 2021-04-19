@@ -53,28 +53,25 @@ let detectExpressions = async (result) => {
         }
 
         var maxValue = Math.max.apply(null,Object.keys(result.expressions).map((o) => result.expressions[o]) );
-        console.log(maxValue);
         var maxEmotion = Object.keys(result.expressions).find((o) => result.expressions[o] === maxValue); 
         
         if (is_record === 1) { 
             record_value += maxEmotion + " (" + maxValue + ")" + "\n"; 
         }
-        console.log(maxEmotion);
-
         var stringEmotion = "";
         switch (maxEmotion) { 
             case "angry" :
                 stringEmotion = `<img src="./img/emoji/angry.svg" width="90%" /> <h1 class="text--capital">${maxEmotion}</h1>`;
                 break;
-                
+
             case "sad" :
                 stringEmotion = `<img src="./img/emoji/sad.svg" width="90%" /> <h1 class="text--capital">${maxEmotion}</h1>`;
                 break;
-                
+
             case "fearful" :
                 stringEmotion = `<img src="./img/emoji/fearful.svg" width="90%" /> <h1 class="text--capital">${maxEmotion}</h1>`;
                 break;
-                
+
             default: 
             stringEmotion = `<img src="./img/emoji/neutral.svg" width="90%" />`;
                 break;
@@ -142,9 +139,22 @@ async function onPlay() {
         .withFaceExpressions();
 
     detectExpressions(result);
+
+    console.log(result);
+
     if (result) {
+        // Face Landmark Position.;
+        // const landmarkPositions = result.landmarks.positions;
+        // const jawOutline = result.landmarks.getJawOutline();
+        // const nose = result.landmarks.getNose()
+        // const mouth = result.landmarks.getMouth()
+        // const leftEye = result.landmarks.getLeftEye()
+        // const rightEye = result.landmarks.getRightEye()
+        // const leftEyeBbrow = result.landmarks.getLeftEyeBrow()
+        // const rightEyeBrow = result.landmarks.getRightEyeBrow()
+
         const canvas = $('#overlay').get(0)
-        const dims = faceapi.matchDimensions(canvas, displaySize, true)
+        // const dims = faceapi.matchDimensions(canvas, displaySize, true)
         const resizedResult = faceapi.resizeResults(result,displaySize);
         const minConfidence = 0.3
         faceapi.draw.drawDetections(canvas, resizedResult)
