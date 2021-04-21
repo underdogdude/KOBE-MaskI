@@ -152,9 +152,9 @@ async function onPlay() {
         // const rightEye = result.landmarks.getRightEye()
         // const leftEyeBbrow = result.landmarks.getLeftEyeBrow()
         // const rightEyeBrow = result.landmarks.getRightEyeBrow()
-
+        console.log(result , "<");
         const canvas = $('#overlay').get(0)
-        // const dims = faceapi.matchDimensions(canvas, displaySize, true)
+        const dims = faceapi.matchDimensions(canvas, displaySize, true) // Dont' remove this line
         const resizedResult = faceapi.resizeResults(result,displaySize);
         const minConfidence = 0.3
         faceapi.draw.drawDetections(canvas, resizedResult)
