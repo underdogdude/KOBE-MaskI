@@ -126,6 +126,7 @@ function onExpression(emotion) {
 
 async function onPlay() {
     const videoEl = $("#inputVideo").get(0);
+    console.log(videoEl);
     let displaySize = {
         width: $('#inputVideo').width(),
         height: $('#inputVideo').height()
@@ -140,7 +141,7 @@ async function onPlay() {
 
     detectExpressions(result);
 
-    // console.log(result);
+    console.log(result);
 
     if (result) {
         // Face Landmark Position.;
@@ -152,7 +153,7 @@ async function onPlay() {
         // const rightEye = result.landmarks.getRightEye()
         // const leftEyeBbrow = result.landmarks.getLeftEyeBrow()
         // const rightEyeBrow = result.landmarks.getRightEyeBrow()
-        console.log(result.expressions , "Emotional State");
+        console.log(result , "<");
         const canvas = $('#overlay').get(0)
         const dims = faceapi.matchDimensions(canvas, displaySize, true) // Dont' remove this line
         const resizedResult = faceapi.resizeResults(result,displaySize);
@@ -164,9 +165,9 @@ async function onPlay() {
 }
 
 async function run() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+    // const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
     const videoEl = $("#inputVideo").get(0);
-    videoEl.srcObject = stream;
+    // videoEl.srcObject = stream;
 }
 
 

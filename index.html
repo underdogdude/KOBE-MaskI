@@ -18,8 +18,9 @@
         <div class="header" style="margin-bottom: 30px;">
             <img src="./img/logo-sm.png" class="logo" alt="">
             <h1 class="watermark">
-                ROAD SAFETY
+                iCaRe 
             </h1>
+            <span style="text-align: center;">In-Car Emotion Detection and Regulation System.</span>
         </div>
         <div class="body">
             <h3>
@@ -29,5 +30,52 @@
                 Let's Drive
             </a>
         </div>
+        <!-- <button onclick="openA()" class="btn btn-primary">CCLICK</button> -->
     </div>
+    <!-- <script src="./socket.io.js"></script>
+    <script>
+
+        function openA () { 
+
+            let socket = io("ws://localhost:3000", {reconnection: false});
+            // socket.connect();
+            console.log(socket.id); // undefined
+
+            socket.io.on("connect", () => {
+                console.log(socket.id); // "G5p5..."
+            });socket.io.on("error", (error) => {
+                    console.log(error , 'error bitch');
+
+                });
+
+            // const socket = io("ws://localhost:3000");
+            //     socket.io.connect();
+            //     socket.io.on("connect", data => {
+            //         console.log(data);
+            //     });
+
+            //     socket.io.on("error", (error) => {
+            //         console.log(error , 'error bitch');
+
+            //     });
+            //     // socket.emit('led:on');
+            //     // socket.send("led:on");
+            //     console.log('fucink sent');
+            //     // either with send()
+            // //     // or with emit() and custom event names
+            //         // socket.emit("salutations", "Hello!", { "mr": "john" }, Uint8Array.from([1, 2, 3, 4]));
+            
+            // socket.emit('tetik', 'kuy');
+            // // handle the event sent with socket.send()
+            // socket.on("message", data => {
+            //     console.log(data);
+            // });
+
+            // // handle the event sent with socket.emit()
+            // socket.on("greetings", (elem1, elem2, elem3) => {
+            // console.log(elem1, elem2, elem3);
+            // });
+        }
+            
+    </script> -->
 </body>

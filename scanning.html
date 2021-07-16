@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { 
+        /* body { 
             background: #0F181F;
             margin: 0;
             padding: 0;
@@ -26,13 +26,18 @@
             align-items: center;
             flex-direction: column;
             overflow-x: hidden;
-        }
+        } */
         canvas {
             position: absolute;
         }
+        .canvas *{ 
+            top: 70%;
+            left: 0;
+        }
         .scanning{
             position: absolute;
-            top: 0;
+            top: 50%;
+            z-index: 1;
             left: 0;
             width: 100%;
             height: 100%;
@@ -60,12 +65,19 @@
         }
         .wrapper{ 
             position: relative;
+            height: 400px;
+        }
+        video { 
+            position: absolute;
+            top: 300px;
+            left: 0;
+            z-index: 0;
         }
         .-scanning { 
             padding: 20px;
         }
         .-scanning .heading { 
-            position: fixed;
+            position: absolute;
             top: 30px;
             right: 30px;
             left: 30px;
@@ -75,7 +87,7 @@
         .-scanning .footer-instructure { 
             display: flex;
             align-items: center;
-            position: fixed;
+            position: absolute;
             left: 30px;
             right: 30px;
             bottom: 30px;
@@ -107,14 +119,15 @@
                 <span id="count">Scanning...</span>
             </div>
             <div class="container -scanning">
-                <video id="video" autoplay muted playsinline width="300" 
+                <video id="video" autoplay muted playsinline width="100%" 
                 height="250" ></video>
+                <div class="canvas" id="canvas"></div>
             </div>
         </div>
     </div>
     <div class="footer-instructure">
         <img src="./img/connecting-step.png" class="headline" alt="">
-        <h4 class="font-poppins">
+        <h4 class="font-poppins" style="padding-right: 30px;">
             Please connect your mobile phone with Car Holder
         </h4>
     </div>
@@ -139,13 +152,12 @@ function startVideo() {
 }
 
 video.addEventListener('play', () => {
-  const canvas = faceapi.createCanvasFromMedia(video);
-  const displaySize = { width: video.width, height: video.height }
+    const canvas = faceapi.createCanvasFromMedia(video);
+    const displaySize = { width: video.offsetWidth, height: video.height }
+    document.getElementById("canvas").append(canvas);
   
-  document.body.append(canvas);
-  
-  faceapi.matchDimensions(canvas, displaySize)
-  setInterval(async () => {
+    faceapi.matchDimensions(canvas, displaySize)
+    setInterval(async () => {
     const detections = await faceapi.detectAllFaces(
         video, 
         new faceapi.TinyFaceDetectorOptions()
